@@ -2,6 +2,10 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function TaskForm({ onTaskAdded }) {
+    const config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    };
+
     const [title, setTitle] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
 
@@ -11,7 +15,7 @@ function TaskForm({ onTaskAdded }) {
             const response = await axios.post('http://localhost:5134/api/tasks', {
                 title,
                 isCompleted,
-            });
+            }, config);
             onTaskAdded(response.data); // Callback to update TaskList
             setTitle(''); // Reset form
             setIsCompleted(false);

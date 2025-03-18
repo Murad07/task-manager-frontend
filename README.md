@@ -55,3 +55,25 @@ lsof -i :5175
 - Identify the PID (Process ID).
 Kill the process using the PID
 kill -9 <PID>
+
+
+## Day 6: Integration & Authentication
+
+### Step 3: Integrate Auth in React
+- Install jwt-decode (optional, for decoding)
+npm install jwt-decode
+
+- Create src/components/Login.jsx
+- Update App.jsx with auth state:
+- Update TaskList.jsx and TaskForm.jsx to use the token:
+
+// In TaskList.jsx
+const config = {
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+};
+await axios.get('https://localhost:7291/api/tasks', config);
+await axios.put(`https://localhost:7291/api/tasks/${id}`, updatedTask, config);
+await axios.delete(`https://localhost:7291/api/tasks/${id}`, config);
+
+// In TaskForm.jsx
+await axios.post('https://localhost:7291/api/tasks', { title, isCompleted }, config);

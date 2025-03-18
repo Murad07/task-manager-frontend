@@ -3,6 +3,10 @@ import axios from 'axios';
 import TaskForm from './TaskForm';
 
 function TaskList() {
+    const config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    };
+
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,7 +14,7 @@ function TaskList() {
     // Fetch tasks
     const fetchTasks = async () => {
         try {
-            const response = await axios.get('http://localhost:5134/api/tasks');
+            const response = await axios.get('http://localhost:5134/api/tasks', config);
             setTasks(response.data);
             setLoading(false);
         } catch (err) {
@@ -32,7 +36,7 @@ function TaskList() {
     // Handle task update
     const handleUpdate = async (id, updatedTask) => {
         try {
-            await axios.put(`http://localhost:5134/api/tasks/${id}`, updatedTask);
+            await axios.put(`http://localhost:5134/api/tasks/${id}`, updatedTask, config);
             setTasks(tasks.map((task) =>
                 task.id === id ? { ...task, ...updatedTask } : task
             ));
@@ -45,7 +49,7 @@ function TaskList() {
     // Handle task deletion
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5134/api/tasks/${id}`);
+            await axios.delete(`http://localhost:5134/api/tasks/${id}`, config);
             setTasks(tasks.filter((task) => task.id !== id));
         } catch (error) {
             console.error('Error deleting task:', error);
